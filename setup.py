@@ -27,7 +27,7 @@ setup(
     description="Yet Another Python Switch-Case",
     keywords=["switch", "case", "metaprogramming"],
     install_requires=[],
-    python_requires=">=3.6",
+    python_requires=">=3.4",
     url="https://github.com/abarker/yapsc",
 
     license="MIT",
