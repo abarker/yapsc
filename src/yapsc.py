@@ -2,50 +2,10 @@
 
 Yet Another Python Switch-Case
 
-Test ideas for magic switch statement from a class def.  Inspired by
-   https://old.reddit.com/r/Python/comments/irapp9/introducing_switches_a_package_that_adds_support/
-
-Note Python may add a pattern match, which would possibly allow real cases.
-   https://www.python.org/dev/peps/pep-0622/
-
-Some projects similar.
-   https://github.com/tetrapus/switchcase/blob/master/switchclass.py
-
-
-Usage notes:
-
-    * Define the switch class in the scope you want to be visible to the defined case
-      code.
-
-    * If possible don't define the switch class inside a loop.  Just call `switch` inside
-      the loop.  Then in the loop you get real dict-hashed function dispatch without the
-      definition overhead.
-
-    * No fallthrough, but the `case` command can take multiple arguments to match (like
-      Pascal rather than like C).
-
-    * Only hashable values can be switched on.
-
-    * Calls outside the definition return a list of all the return values of the
-      functions that are run.
-
-    * If the case functions take parameters they must all take the same number of parameters
-      and the arguments must be passed as extra arguments to the call to the switch.  The
-      `on` keyword cannot be used in this case.
-
-    * The class name can be arbitrary, but should be different from any other switches
-      in the same scope.  The case function names are ignored and can either be "_" or
-      any string not starting with "_" except for "switch".
-
-    * The switch can be called 1) as a function call to the user-defined switch class,
-      2) via the `switch` classmethod of the user-defined switch class, or 3) by passing
-      the value and any arguments to the `on` keyword parameter to the switch class
-      definition.
 
 """
 
 from collections import defaultdict
-from types import SimpleNamespace
 
 #
 # Utility classes.
@@ -77,6 +37,9 @@ class CaseCollectingDict(dict):
 
 def case(*args):
     """The `case` decorator used in switch definitions."""
+    if not args:
+        raise SwitchError("No case arguments.  Use the '@default' decorator to"
+                          " define the default case.")
     def process_case(fun):
         return [fun, args]
     return process_case

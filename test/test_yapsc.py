@@ -7,14 +7,16 @@ def test_basic_stuff():
         @case("egg")
         def _():
             print("case egg")
+            return "egg"
 
         @case("salad")
         def _():
             print("case salad")
+            return "salad"
 
-    StringCaseSwitch("egg") # Runs the function for case "egg".
-    StringCaseSwitch("egg") # Runs the function for case "egg".
-    StringCaseSwitch.switch("salad") # Runs the function for case "egg".
+    assert StringCaseSwitch("egg") == ("egg",)
+    assert StringCaseSwitch("egg") == ("egg",)
+    assert StringCaseSwitch.switch("salad") == ("salad",)
 
     print()
 
@@ -25,7 +27,7 @@ def test_basic_stuff():
             @case("water")
             def _():
                 print("case water")
-                print("local_var =", local_var)
+                assert local_var == "local"
                 return "water"
 
             @case("salad")
@@ -57,10 +59,6 @@ def test_cases_taking_args_and_kwargs():
     # TODO
     pass
 
-def test_cases_returning_values():
-    # TODO
-    pass
-
 def test_exception():
 
     class StringCaseSwitch(Switch, on="egg"):
@@ -75,8 +73,43 @@ def test_exception():
     except SwitchError:
         assert True
 
+def test_example_code():
+
+    class CommandSwitch(Switch):
+
+        @case("play")
+        def _():
+            print("play command")
+            return "play"
+
+        @case("back")
+        def _():
+            print("back command")
+            return "back"
+
+        @case("forward")
+        def _():
+            print("forward command")
+            return "forward"
+
+        @case("back", "forward")
+        def _():
+            print("back or forward command")
+            return "back or forward"
+
+        @default # Default.
+        def _():
+            print("default case")
+            return "default"
+
+    command = "back"
+    output = CommandSwitch(command)
+    assert output == ("back", "back or forward")
+    output = CommandSwitch("non-command")
+    assert output == ("default",)
+
+
 test_basic_stuff()
 test_cases_taking_args_and_kwargs()
-test_cases_returning_values()
 test_exception()
-
+test_example_code()
