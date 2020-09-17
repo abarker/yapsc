@@ -56,8 +56,47 @@ def test_basic_stuff():
     in_fun()
 
 def test_cases_taking_args_and_kwargs():
-    # TODO
-    pass
+
+    class CommandSwitch(Switch):
+
+        @case("play")
+        def _(param, *, kw):
+            assert param == 99
+            assert kw == "kw"
+            print("play command")
+            return "play"
+
+        @case("back")
+        def _(param, **kwargs):
+            assert param == 99
+            print("back command")
+            return "back"
+
+        @case("forward")
+        def _(param, *, kw2=4):
+            assert param == 99
+            assert kw2 == "kw2"
+            print("forward command")
+            return "forward"
+
+        @case("back", "forward")
+        def _(param, **kwargs):
+            assert param == 99
+            print("back or forward command")
+            return "back or forward"
+
+        @default # Default.
+        def _(param, **kwargs):
+            assert param == 99
+            print("default case")
+            return "default"
+
+    command = "back"
+    output = CommandSwitch(command, 99, kw="kw", kw2="kw2")
+    assert output == ("back", "back or forward")
+    output = CommandSwitch("non-command", 99, kw="kw", kw2="kw2")
+    assert output == ("default",)
+
 
 def test_exception():
 
@@ -69,6 +108,15 @@ def test_exception():
 
     try: # Raise an exception.
         StringCaseSwitch.switch("zzz")
+        assert False
+    except SwitchError:
+        assert True
+
+    try:
+        class BadSwitch(Switch):
+            @case
+            def _():
+                pass
         assert False
     except SwitchError:
         assert True

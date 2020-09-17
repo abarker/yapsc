@@ -4,12 +4,12 @@ yapsc -- Yet Another Python Switch-Case
 =======================================
 
 This is another Python implementation of a switch-case statement.  Many
-versions and variations of Python switch-case implementations are out there,
-but I think this one has some advantages over the ones I've seen.  (The closest
-to this version is probably at `tetrapus/switchcase
+versions and variations of Python switch-case constructs are out there, but
+this one has syntax and a combination of features I have not seen.  (The
+closest to this version is probably at `tetrapus/switchcase
 <https://github.com/tetrapus/switchcase>`_.)
 
-This is basically a nice syntax for wrapping a dict-based function dispatch.
+This is basically a nice syntax for defining a dict-based function dispatch.
 The switch call is quite efficient, and can be separated from the switch
 definition and its associated overhead.  Fallthrough is not implemented, but
 the `case` command can take multiple arguments to match (like Pascal's case
@@ -40,7 +40,7 @@ Example code
        def _():
            print("back or forward command")
 
-       @case # Default.
+       @default
        def _():
            print("default case")
 
@@ -69,8 +69,8 @@ Usage notes:
 
    * The switch can be called 1) as a function call to the user-defined switch
      class, 2) via the `switch` classmethod of the user-defined switch class,
-     or 3) by passing the value as the `on` keyword argument to the switch
-     class definition.
+     or 3) by passing the control variable as the `on` keyword argument to the
+     switch class definition.
 
    * Calls to the switch return a tuple of all the return values of all the
      case-functions that were run.  (But running from the `on` keyword in the
@@ -83,9 +83,10 @@ Usage notes:
      inside the loop.  Then in the loop you get real dict-hashed function
      dispatch without the definition overhead.
 
-   * If the case-functions take parameters they must all take the same number
-     of parameters.  The arguments must be passed as extra arguments in the
-     call to the switch.  The `on` keyword cannot be used in this case.
+   * If the case-functions take parameters and/or keyword arguments they must
+     all take the same number of parameters and same keywords.  The parameter
+     values must be passed as extra arguments in the call to the switch.  The
+     `on` keyword cannot be used in this case.
 
 It should be noted that if Python's `PEP-622
 <https://www.python.org/dev/peps/pep-0622/>`_ for pattern matching is accepted
