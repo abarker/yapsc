@@ -55,8 +55,6 @@ This prints out::
 Usage notes
 -----------
 
-Usage notes:
-
 * Any (and only) hashable values can be switched on.
 
 * When there are multiple matching cases their function are called in the
