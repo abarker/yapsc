@@ -57,36 +57,36 @@ Usage notes
 
 Usage notes:
 
-   * Any (and only) hashable values can be switched on.
+* Any (and only) hashable values can be switched on.
 
-   * When there are multiple matching cases their function are called in the
-     sequence that they were defined in.
+* When there are multiple matching cases their function are called in the
+  sequence that they were defined in.
 
-   * The class name can be arbitrary, but should be different from any other
-     switches in the same scope.  The case-function names are ignored and can
-     either be "_" or a valid attribute name not starting with "_", excepting
-     "switch".
+* The class name can be arbitrary, but should be different from any other
+  switches in the same scope.  The case-function names are ignored and can
+  either be "_" or a valid attribute name not starting with "_", excepting
+  "switch".
 
-   * The switch can be called 1) as a function call to the user-defined switch
-     class, 2) via the `switch` classmethod of the user-defined switch class,
-     or 3) by passing the control variable as the `on` keyword argument to the
-     switch class definition.
+* The switch can be called 1) as a function call to the user-defined switch
+  class, 2) via the `switch` classmethod of the user-defined switch class,
+  or 3) by passing the control variable as the `on` keyword argument to the
+  switch class definition.
 
-   * Calls to the switch return a tuple of all the return values of all the
-     case-functions that were run.  (But running from the `on` keyword in the
-     switch definition does not return a value.)
+* Calls to the switch return a tuple of all the return values of all the
+  case-functions that were run.  (But running from the `on` keyword in the
+  switch definition does not return a value.)
 
-   * The switch class should be defined in the scope you want to be visible to
-     the case-function code.
+* The switch class should be defined in the scope you want to be visible to
+  the case-function code.
 
-   * If possible don't define the switch class inside a loop; just put the call
-     inside the loop.  Then in the loop you get real dict-hashed function
-     dispatch without the definition overhead.
+* If possible don't define the switch class inside a loop; just put the call
+  inside the loop.  Then in the loop you get real dict-hashed function
+  dispatch without the definition overhead.
 
-   * If the case-functions take parameters and/or keyword arguments they must
-     all take the same number of parameters and same keywords.  The parameter
-     values must be passed as extra arguments in the call to the switch.  The
-     `on` keyword cannot be used in this case.
+* If the case-functions take parameters and/or keyword arguments they must
+  all take the same number of parameters and same keywords.  The parameter
+  values must be passed as extra arguments in the call to the switch.  The
+  `on` keyword cannot be used in this case.
 
 It should be noted that if Python's `PEP-622
 <https://www.python.org/dev/peps/pep-0622/>`_ for pattern matching is accepted
