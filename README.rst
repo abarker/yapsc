@@ -3,17 +3,17 @@
 yapsc -- Yet Another Python Switch-Case
 =======================================
 
-This is another Python implementation of a switch-case statement.  Many
-versions and variations of Python switch-case constructs are out there, but
-this one has syntax and a combination of features I have not seen.  (The
-closest to this version is probably at `tetrapus/switchcase
+Another Python implementation of a switch-case statement.  Many versions and
+variations of Python switch-case constructs are out there, but this one has
+syntax and a combination of features I have not seen.  (The closest to this
+version is probably at `tetrapus/switchcase
 <https://github.com/tetrapus/switchcase>`_.)
 
-This is basically a nice syntax for defining a dict-based function dispatch.
-The switch call is quite efficient, and can be separated from the switch
-definition and its associated overhead.  Fallthrough is not implemented, but
-the `case` command can take multiple arguments to match (like Pascal's case
-statement rather than C's).
+This is basically just convenient syntax for defining a dict-based function
+dispatch.  The switch call is quite efficient, and can be separated from the
+switch definition and its associated overhead.  Fallthrough is not implemented,
+but the `case` decorator can take multiple arguments to match (like Pascal's
+case statement rather than C's).
 
 Example code
 ------------
