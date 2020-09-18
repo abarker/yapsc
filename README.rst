@@ -71,8 +71,8 @@ Usage notes
   switch class definition.
 
 * Calls to the switch return a tuple of all the return values of all the
-  case-functions that were run.  (But running from the `on` keyword in the
-  switch definition does not return a value.)
+  case-functions that were run.  (But note that running from the `on` keyword
+  in the switch definition does not return a value.)
 
 * The switch class should be defined in the scope you want to be visible to
   the case-function code.
