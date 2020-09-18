@@ -23,7 +23,7 @@ with codecs.open(os.path.join(current_dir, "README.rst"), encoding="utf-8") as f
 
 setup(
     name="yapsc",
-    version="0.1.1", # major version, minor version, patch (see PEP440)
+    version="0.1.2", # major version, minor version, patch (see PEP440)
     description="Yet Another Python Switch-Case",
     keywords=["switch", "case", "metaprogramming"],
     install_requires=[],

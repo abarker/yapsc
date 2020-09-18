@@ -59,9 +59,10 @@ def test_basic_stuff():
             value = SwitchOn.switch("should be default")
             assert value == ("default",)
 
-        # Test running function as a staticmethod.
+        # Test running a case function as a staticmethod.
         value = SwitchOn.anyname()
         assert value == "water or salad"
+
     in_fun()
 
 def test_cases_taking_args_and_kwargs():
@@ -107,7 +108,7 @@ def test_cases_taking_args_and_kwargs():
     assert output == ("default",)
 
 
-def test_exception():
+def test_exceptions():
 
     class StringCaseSwitch(Switch, on="egg"):
 
@@ -115,20 +116,46 @@ def test_exception():
         def _():
             print("case egg")
 
-    try: # Raise an exception.
+    # Exception no case matches but no default case.
+    try:
         StringCaseSwitch.switch("zzz")
         assert False
     except SwitchError:
         assert True
 
+    # Exception where case decorator is called with no parens.
     try:
-        class BadSwitch(Switch):
+        class BadSwitchEmptyCase(Switch):
             @case
             def _():
                 pass
         assert False
     except SwitchError:
         assert True
+
+    # Exception where the case function is given a disallowed name (switch here
+    # would clash with the classmethod).
+    try:
+        class BadCaseName(Switch):
+            @case("x")
+            def switch():
+                pass
+        assert False
+    except SwitchError:
+        assert True
+
+    # Make sure arbitrary attrs can still be added after checking for above error
+    # conditions.
+    class AttrAdd(Switch):
+        @case("x")
+        def _():
+            pass
+
+        x = [1,2,3] # Make sure arbitrary attrs can be added.
+
+    AttrAdd.y = [4,5,6]
+    assert AttrAdd.x == [1,2,3]
+    assert AttrAdd.y == [4,5,6]
 
 def test_example_code():
 
@@ -168,5 +195,5 @@ def test_example_code():
 
 test_basic_stuff()
 test_cases_taking_args_and_kwargs()
-test_exception()
+test_exceptions()
 test_example_code()
