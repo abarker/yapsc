@@ -98,6 +98,6 @@ Usage notes
 
 It should be noted that if Python's `PEP-622
 <https://www.python.org/dev/peps/pep-0622/>`_ for pattern matching is accepted
-then for future Python versions these switch-case implementations will become
-pointless.
+then for future Python versions these kinds of switch-case implementations may
+become outdated.
 
