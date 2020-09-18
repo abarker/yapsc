@@ -14,9 +14,15 @@ def test_basic_stuff():
             print("case salad")
             return "salad"
 
+        @case(99) # Test non-string.
+        def _():
+            print("case int 99")
+            return "99"
+
     assert StringCaseSwitch("egg") == ("egg",)
     assert StringCaseSwitch("egg") == ("egg",)
     assert StringCaseSwitch.switch("salad") == ("salad",)
+    assert StringCaseSwitch(99) == ("99",)
 
     print()
 
