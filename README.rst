@@ -52,6 +52,13 @@ This prints out::
    back command
    back or forward command
 
+Installation
+------------
+
+.. code-block:: bash
+
+   pip install yapsc
+
 Usage notes
 -----------
 
@@ -90,11 +97,4 @@ It should be noted that if Python's `PEP-622
 <https://www.python.org/dev/peps/pep-0622/>`_ for pattern matching is accepted
 then for future Python versions these switch-case implementations will become
 pointless.
-
-Installation
-------------
-
-.. code-block:: bash
-
-   pip install yapsc
 
