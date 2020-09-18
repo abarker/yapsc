@@ -62,7 +62,7 @@ Usage notes
 
 * The class name can be arbitrary, but should be different from any other
   switches in the same scope.  The case-function names are ignored and can
-  either be `"_"` or a valid attribute name not starting with `"_", excepting
+  either be `"_"` or a valid attribute name not starting with `"_"`, excepting
   `"switch"`.
 
 * The switch can be called 1) as a function call to the user-defined switch
