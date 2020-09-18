@@ -59,6 +59,9 @@ def test_basic_stuff():
             value = SwitchOn.switch("should be default")
             assert value == ("default",)
 
+        # Test running function as a staticmethod.
+        value = SwitchOn.anyname()
+        assert value == "water or salad"
     in_fun()
 
 def test_cases_taking_args_and_kwargs():

@@ -23,6 +23,7 @@ class CaseCollectingDict(dict):
         if hasattr(value, "_yapsc_id"):
             raise SwitchError("The 'case' decorator was called with no arguments."
                               " Use the '@default' decorator for the default case.")
+
         if isinstance(key, str) and isinstance(value, list) and key != "switch" and (
                                                                 key == "_" or key[0] != "_"):
             fun, case_args = value
@@ -31,7 +32,9 @@ class CaseCollectingDict(dict):
             for arg in case_args:
                 # Wrap `arg` in a tuple so the default case can have a unique `()` key.
                 self["_fundict"][(arg,)].append(fun)
-        else:
+            super().__setitem__(key, staticmethod(fun)) # Set the fun as a staticmethod.
+
+        else: # Allow arbitrary attrs to be set, but ignore them as part of switch.
             super().__setitem__(key, value)
 
 #
