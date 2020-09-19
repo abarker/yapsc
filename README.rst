@@ -82,7 +82,7 @@ Usage notes
 * The switch can be called 1) as a function call to the user-defined switch
   class, 2) via the `switch` classmethod of the user-defined switch class, or
   3) by passing the control variable as the `on` keyword argument to the switch
-  class definition (i.e., pass it after the `Switch`).
+  class definition (i.e., passed just after the `Switch`).
 
 * Calls to the switch return a tuple of all the return values of all the
   case-functions that were run.  (But note that running from the `on` keyword
