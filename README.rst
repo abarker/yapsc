@@ -13,7 +13,7 @@ This is basically just convenient syntax for defining a dict-based function
 dispatch.  The switch call is quite efficient, and can be separated from the
 switch definition and its associated overhead.  Fallthrough is not implemented,
 but the `case` decorator can take multiple arguments to match (like Pascal's
-case statement rather than C's).
+case statement rather than C's except duplicate cases are allowed).
 
 Example code
 ------------
