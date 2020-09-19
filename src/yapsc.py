@@ -17,7 +17,7 @@ _marker = "Unique element to detect error conditions."
 
 class CaseCollectingDict(dict):
     """This is a dict subclass which adds the feature of saving the data
-    passed to `__setitem__` calls for the key `_` to a dict.  It is set as the
+    passed to `__setitem__` calls for certain key values.  It is set as the
     `__prepare__` method `SwitchMetaclass`."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
