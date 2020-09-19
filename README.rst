@@ -67,6 +67,10 @@ Usage notes
 * When there are multiple matching cases their function are called in the
   sequence that they were defined in.
 
+* To disallow duplicate case values, more like Pascal, you can pass
+  `dups=False` as a keyword argument to the switch class definition (i.e., pass
+  it after the `Switch`).
+
 * The class name can be arbitrary, but should be different from any other
   switches in the same scope.
   
@@ -76,9 +80,9 @@ Usage notes
   (assuming they have a unique function name).
 
 * The switch can be called 1) as a function call to the user-defined switch
-  class, 2) via the `switch` classmethod of the user-defined switch class,
-  or 3) by passing the control variable as the `on` keyword argument to the
-  switch class definition.
+  class, 2) via the `switch` classmethod of the user-defined switch class, or
+  3) by passing the control variable as the `on` keyword argument to the switch
+  class definition (i.e., pass it after the `Switch`).
 
 * Calls to the switch return a tuple of all the return values of all the
   case-functions that were run.  (But note that running from the `on` keyword
