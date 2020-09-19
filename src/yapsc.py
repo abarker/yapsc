@@ -7,6 +7,8 @@ Yet Another Python Switch-Case
 
 from collections import defaultdict
 
+DUPS_DEFAULT = True # The default for allowing duplicate case values.
+
 #
 # Utility classes.
 #
@@ -32,10 +34,15 @@ class CaseCollectingDict(dict):
             if key != "switch" and (key == "_" or key[0] != "_"):
                 fun, case_args, _mark = value
                 if not case_args: # Data from from the `default` decorator.
-                    self["_fundict"][()] = fun
+                    if () in self["_fundict"]:
+                        raise SwitchError("Multiple instances of default decorator.")
+                    self["_fundict"][()] = [fun] # In a list for consistency.
                 for arg in case_args: # Data from the `case` decorator.
                     # Wrap `arg` in a tuple so the default case can have a unique `()` key.
-                    self["_fundict"][(arg,)].append(fun)
+                    fun_list = self["_fundict"][(arg,)]
+                    if len(fun_list) == 1 and not self["_allow_dups"]:
+                        raise SwitchError("Duplicate use of case value '{}'".format(arg))
+                    fun_list.append(fun)
                 super().__setitem__(key, staticmethod(fun)) # Set the fun as a staticmethod.
             else:
                 raise SwitchError("Decorator called with a disallowed case name.")
@@ -67,18 +74,19 @@ def default(fun):
 
 class SwitchMetaclass(type):
     """Metaclass for the `Switch` class."""
-    def __new__(mcs, name, bases, attrs, *, on=[]):
+    def __new__(mcs, name, bases, attrs, *, on=[], dups=DUPS_DEFAULT):
         new_class = super().__new__(mcs, name, bases, attrs)
         return new_class
 
     @classmethod
-    def __prepare__(mcs, name, bases, on=[]):
+    def __prepare__(mcs, name, bases, on=[], dups=DUPS_DEFAULT):
         """Return the dict-like object to be set as `__dict__` (i.e., to hold
         the class attributes)."""
         dct = CaseCollectingDict() # Saves data each time a case is defined.
+        dct["_allow_dups"] = dups # Needs to be availible during class creation.
         return dct
 
-    def __init__(cls, name, bases, attrs, on=[]):
+    def __init__(cls, name, bases, attrs, on=[], dups=DUPS_DEFAULT):
         """Initialize after the class is created, collecting all the case argument
         and function data saved by the `CaseCollectingDict` into a dict."""
         # Evaluate if an `on` argument was passed.
@@ -102,7 +110,7 @@ class Switch(metaclass=SwitchMetaclass):
             fun_list = fundict[(control_var,)]
             return_vals = [fun(*args, **kwargs) for fun in fun_list]
         elif () in fundict:
-            return_vals = [fundict[()](*args, **kwargs)]
+            return_vals = [fundict[()][0](*args, **kwargs)]
         else:
             raise SwitchError("No case matches and no default is defined.")
         return tuple(return_vals)

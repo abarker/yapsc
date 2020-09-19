@@ -133,6 +133,32 @@ def test_exceptions():
     except SwitchError:
         assert True
 
+    # Exception multiple @default decorators.
+    try:
+        class MultipleDefault(Switch):
+            @default
+            def _():
+                pass
+            @default
+            def _():
+                pass
+        assert False
+    except SwitchError:
+        assert True
+
+    # Exception dups not allowed but dups present.
+    try:
+        class ForbiddenDups(Switch, dups=False):
+            @case("a")
+            def _():
+                pass
+            @case("b","a")
+            def _():
+                pass
+        assert False
+    except SwitchError:
+        assert True
+
     # Exception where the case function is given a disallowed name (switch here
     # would clash with the classmethod).
     try:
