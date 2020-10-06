@@ -68,6 +68,7 @@ Example code
 This prints out::
 
    exit or quit command
+   play command
 
 Installation
 ------------
