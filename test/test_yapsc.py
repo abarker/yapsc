@@ -2,7 +2,7 @@ from yapsc import Switch, case, default, SwitchError
 
 def test_basic_stuff():
 
-    class StringCaseSwitch(Switch, on="salad"):
+    class StringCaseSwitch(Switch, dups=True, on="salad"):
 
         @case("egg")
         def _():
@@ -28,7 +28,7 @@ def test_basic_stuff():
 
     def in_fun():
 
-        class SwitchOn(Switch, on="zooba"):
+        class SwitchOn(Switch, dups=True, on="zooba"):
 
             @case("water")
             def _():
@@ -67,7 +67,7 @@ def test_basic_stuff():
 
 def test_cases_taking_args_and_kwargs():
 
-    class CommandSwitch(Switch):
+    class CommandSwitch(Switch, dups=True):
 
         @case("play")
         def _(param, *, kw):
@@ -110,7 +110,7 @@ def test_cases_taking_args_and_kwargs():
 
 def test_exceptions():
 
-    class StringCaseSwitch(Switch, on="egg"):
+    class StringCaseSwitch(Switch, dups=True, on="egg"):
 
         @case("egg")
         def _():
@@ -125,7 +125,7 @@ def test_exceptions():
 
     # Exception where case decorator is called with no parens.
     try:
-        class BadSwitchEmptyCase(Switch):
+        class BadSwitchEmptyCase(Switch, dups=True):
             @case
             def _():
                 pass
@@ -135,7 +135,7 @@ def test_exceptions():
 
     # Exception multiple @default decorators.
     try:
-        class MultipleDefault(Switch):
+        class MultipleDefault(Switch, dups=True):
             @default
             def _():
                 pass
@@ -147,6 +147,7 @@ def test_exceptions():
         assert True
 
     # Exception dups not allowed but dups present.
+    # NOTE: Exceptions on dups is now the default behavior.
     try:
         class ForbiddenDups(Switch, dups=False):
             @case("a")
@@ -162,7 +163,7 @@ def test_exceptions():
     # Exception where the case function is given a disallowed name (switch here
     # would clash with the classmethod).
     try:
-        class BadCaseName(Switch):
+        class BadCaseName(Switch, dups=True):
             @case("x")
             def switch():
                 pass
@@ -172,7 +173,7 @@ def test_exceptions():
 
     # Make sure arbitrary attrs can still be added after checking for above error
     # conditions.
-    class AttrAdd(Switch):
+    class AttrAdd(Switch, dups=True):
         @case("x")
         def _():
             pass
@@ -183,9 +184,9 @@ def test_exceptions():
     assert AttrAdd.x == [1,2,3]
     assert AttrAdd.y == [4,5,6]
 
-def test_example_code():
+def test_old_example_code():
 
-    class CommandSwitch(Switch):
+    class CommandSwitch(Switch, dups=True):
 
         @case("play")
         def _():
@@ -218,8 +219,48 @@ def test_example_code():
     output = CommandSwitch("non-command")
     assert output == ("default",)
 
+def test_example_code():
+   """Test new example code, after the default was changed to disallow dups by default."""
+
+   class CommandSwitch(Switch):
+
+       @case("play")
+       def _():
+           print("play command")
+           return "play command"
+
+       @case("back")
+       def _():
+           print("back command")
+           return "back command"
+
+       @case("forward")
+       def _():
+           print("forward command")
+           return "forward command"
+
+       @case("exit", "quit")
+       def _():
+           print("exit or quit command")
+           return "exit or quit command"
+
+       @default
+       def _():
+           print("default case")
+           return "default case"
+
+   command = "exit"
+   value = CommandSwitch(command)
+   assert value == "exit or quit command"
+
+   command = "play"
+   value = CommandSwitch(command)
+   assert value == "play command"
+
 
 test_basic_stuff()
 test_cases_taking_args_and_kwargs()
 test_exceptions()
+test_old_example_code()
 test_example_code()
+

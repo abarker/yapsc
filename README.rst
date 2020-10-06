@@ -13,13 +13,13 @@ This is basically just convenient syntax for defining a dict-based function
 dispatch.  The switch call is quite efficient, and can be separated from the
 switch definition and its associated overhead.  Fallthrough is not implemented,
 but the `case` decorator can take multiple arguments to match (like Pascal's
-case statement rather than C's except duplicate cases are allowed).
+case statement rather than C's).
 
 **Update:** The new default is to raise an exception on a repeated case, which
 is more like the Pascal case statement.  Since at most one function can run,
 the return value of the case statement is not wrapped in a tuple.  (To get the
 previous behavior, with repeats allowed, all matching cases run sequentially,
-and the results returned in a list, pass the ``dups=True`` flag to the switch
+and the results returned in a tuple, pass the ``dups=True`` flag to the switch
 initializer.)
 
 Example code
@@ -74,9 +74,9 @@ Installation
 Usage notes
 -----------
 
-* Any (and only) hashable values can be switched on.  The default is that a
-  particular case values can only appear once in the statement or an exception
-  is raised.
+* Any (and only) hashable values can be switched on.  By default a particular
+  case value can only appear once in the statement or else an exception is
+  raised.
 
 * The class name can be arbitrary, but should be different from any other
   switches in the same scope.
