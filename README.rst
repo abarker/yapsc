@@ -15,6 +15,13 @@ switch definition and its associated overhead.  Fallthrough is not implemented,
 but the `case` decorator can take multiple arguments to match (like Pascal's
 case statement rather than C's except duplicate cases are allowed).
 
+**Update:** The new default is to raise an exception on a repeated case, which
+is more like the Pascal case statement.  Since at most one function can run,
+the return value of the case statement is not wrapped in a tuple.  (To get the
+previous behavior, with repeats allowed, all matching cases run sequentially,
+and the results returned in a list, pass the ``dups=True`` flag to the switch
+initializer.)
+
 Example code
 ------------
 
@@ -27,30 +34,35 @@ Example code
        @case("play")
        def _():
            print("play command")
+           return "play command"
 
        @case("back")
        def _():
            print("back command")
+           return "back command"
 
        @case("forward")
        def _():
            print("forward command")
+           return "forward command"
 
-       @case("back", "forward")
+       @case("exit", "quit")
        def _():
-           print("back or forward command")
+           print("exit or quit command")
+           return "exit or quit command"
 
        @default
        def _():
            print("default case")
+           return "default case"
 
-   command = "back"
-   CommandSwitch(command)
+   command = "exit"
+   value = CommandSwitch(command)
+   assert value == "exit or quit command"
 
 This prints out::
 
-   back command
-   back or forward command
+   exit or quit command
 
 Installation
 ------------
@@ -62,14 +74,9 @@ Installation
 Usage notes
 -----------
 
-* Any (and only) hashable values can be switched on.
-
-* When there are multiple matching cases their function are called in the
-  sequence that they were defined in.
-
-* To disallow duplicate case values, more like Pascal, you can pass
-  `dups=False` as a keyword argument to the switch class definition (i.e., pass
-  it after the `Switch`).
+* Any (and only) hashable values can be switched on.  The default is that a
+  particular case values can only appear once in the statement or an exception
+  is raised.
 
 * The class name can be arbitrary, but should be different from any other
   switches in the same scope.
@@ -84,9 +91,9 @@ Usage notes
   3) by passing the control variable as the `on` keyword argument to the switch
   class definition (i.e., passed just after the `Switch`).
 
-* Calls to the switch return a tuple of all the return values of all the
-  case-functions that were run.  (But note that running from the `on` keyword
-  in the switch definition does not return a value.)
+* Calls to the switch return the return value of the case-function that was
+  run.  (But note that running from the `on` keyword in the switch definition
+  does not return a value.)
 
 * The switch class should be defined in the scope you want to be visible to
   the case-function code.
@@ -100,8 +107,14 @@ Usage notes
   values must be passed as extra arguments in the call to the switch.  The
   `on` keyword cannot be used in this case.
 
-It should be noted that if Python's `PEP-622
-<https://www.python.org/dev/peps/pep-0622/>`_ for pattern matching is accepted
+* To allow duplicate case values you can pass `dups=True` as a keyword argument
+  to the switch class definition (i.e., pass it after the `Switch`
+  inheritance).  When there are multiple matching cases their function are
+  called in the sequence that they were defined in.  The return value of the
+  switch is a tuple of all the return values for each case that was run.
+
+It should be noted that if Python's `PEP-634
+<https://www.python.org/dev/peps/pep-0634/>`_ for pattern matching is accepted
 then for future Python versions these kinds of switch-case implementations may
 become outdated.
 

@@ -7,7 +7,7 @@ Yet Another Python Switch-Case
 
 from collections import defaultdict
 
-DUPS_DEFAULT = True # The default for allowing duplicate case values.
+DUPS_DEFAULT = False # The default for allowing duplicate case values.
 
 #
 # Utility classes.
@@ -83,7 +83,7 @@ class SwitchMetaclass(type):
         """Return the dict-like object to be set as `__dict__` (i.e., to hold
         the class attributes)."""
         dct = CaseCollectingDict() # Saves data each time a case is defined.
-        dct["_allow_dups"] = dups # Needs to be availible during class creation.
+        dct["_allow_dups"] = dups # Needs to be available during class creation.
         return dct
 
     def __init__(cls, name, bases, attrs, on=[], dups=DUPS_DEFAULT):
@@ -113,7 +113,10 @@ class Switch(metaclass=SwitchMetaclass):
             return_vals = [fundict[()][0](*args, **kwargs)]
         else:
             raise SwitchError("No case matches and no default is defined.")
-        return tuple(return_vals)
+        if cls._allow_dups:
+            return tuple(return_vals)
+        else:
+            return return_vals[0]
 
 #
 # Exceptions.
