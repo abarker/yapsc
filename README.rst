@@ -60,6 +60,11 @@ Example code
    value = CommandSwitch(command)
    assert value == "exit or quit command"
 
+   command = "play"
+   value = CommandSwitch(command)
+   assert value == "play command"
+
+
 This prints out::
 
    exit or quit command
